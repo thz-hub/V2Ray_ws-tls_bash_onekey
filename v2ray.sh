@@ -305,7 +305,18 @@ download_v2ray() {
     if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$https://raw.githubusercontent.com/thz-hub/V2Ray_ws-tls_bash_onekey/master/v2ray.sh" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
-}
+
+    fi
+    echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
+    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+        echo 'error: Download failed! Please check your network or try again.'
+        return 1
+    fi
+    if [[ "$(cat "$ZIP_FILE".dgst)" == 'Not Found' ]]; then
+        echo 'error: This version does not support verification. Please replace with another version.'
+        return 1
+    fi
+
 
 decompression() {
     if ! unzip -q "$1" -d "$TMP_DIRECTORY"; then
