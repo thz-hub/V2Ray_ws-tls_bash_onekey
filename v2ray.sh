@@ -302,30 +302,10 @@ download_v2ray() {
     mkdir "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://gitee.com/thz-hub/V2Ray_ws-tls_bash_onekey/attach_files/511685/download/v2ray-linux-arm64-v8a.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$https://raw.githubusercontent.com/thz-hub/V2Ray_ws-tls_bash_onekey/master/v2ray.sh" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
-    fi
-    echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
-        echo 'error: Download failed! Please check your network or try again.'
-        return 1
-    fi
-    if [[ "$(cat "$ZIP_FILE".dgst)" == 'Not Found' ]]; then
-        echo 'error: This version does not support verification. Please replace with another version.'
-        return 1
-    fi
 
-    # Verification of V2Ray archive
-    for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
-        SUM="$(${LISTSUM}sum "$ZIP_FILE" | sed 's/ .*//')"
-        CHECKSUM="$(grep ${LISTSUM^^} "$ZIP_FILE".dgst | grep "$SUM" -o -a | uniq)"
-        if [[ "$SUM" != "$CHECKSUM" ]]; then
-            echo 'error: Check failed! Please check your network or try again.'
-            return 1
-        fi
-    done
-}
 
 decompression() {
     if ! unzip -q "$1" -d "$TMP_DIRECTORY"; then
