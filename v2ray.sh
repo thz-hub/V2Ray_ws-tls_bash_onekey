@@ -305,7 +305,7 @@ download_v2ray() {
     if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$https://raw.githubusercontent.com/thz-hub/V2Ray_ws-tls_bash_onekey/master/v2ray.sh" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
-
+}
 
 decompression() {
     if ! unzip -q "$1" -d "$TMP_DIRECTORY"; then
